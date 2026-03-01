@@ -75,7 +75,8 @@ Two public services are available for testing:
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `API_TOKENS` | API keys, multiple keys separated by commas | No |
-| `ENABLE_SEARCH` | Enable search functionality, set to `true` to enable | No |
+
+> **Note:** Web search is now enabled by default for all models. The `ENABLE_SEARCH` variable has been deprecated.
 
 ## Usage
 
