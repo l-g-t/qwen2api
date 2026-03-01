@@ -231,7 +231,7 @@ app.post('/v1/chat/completions', async (req, res) => {
     };
     
     console.log(`[API] Chat request: model=${actualModel}, stream=${stream}, chatId=${chatId}`);
-    
+    console.log('requestBody',requestBody)
     const response = await fetch(`https://chat.qwen.ai/api/v2/chat/completions?chat_id=${chatId}`, {
       method: 'POST',
       headers,
