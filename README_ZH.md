@@ -1,5 +1,7 @@
 # Qwen2API
 
+中文 | [English](README.md)
+
 将 Qwen Chat 转换为 OpenAI 兼容的 API 代理服务。
 
 ## 功能特性

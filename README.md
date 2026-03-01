@@ -1,5 +1,7 @@
 # Qwen2API
 
+[中文文档](README_ZH.md) | English
+
 A proxy service that converts Qwen Chat to an OpenAI-compatible API.
 
 ## Features
