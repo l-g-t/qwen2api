@@ -289,7 +289,7 @@
     ].join(';');
 
     const videoSizeInfo = create('div', { textContent: '视频大小: -' });
-    videoSizeInfo.style.cssText = 'margin:6px 0 8px;color:#a7d8ff;font-size:12px;line-height:1.5;';
+    videoSizeInfo.style.cssText = 'margin:8px 0 0;color:#a7d8ff;font-size:12px;line-height:1.5;text-align:center;';
     let activeAbortController = null;
     let lastVideoSizeText = '';
 
@@ -329,9 +329,11 @@
       const panelRect = panel.getBoundingClientRect();
       const listRect = statusList.getBoundingClientRect();
       const bottomPadding = 12;
+      const extraGap = 10;
+      const footerReserve = Math.max(18, videoSizeInfo.offsetHeight || 0) + 8;
       const minHeight = 96;
       const maxHeight = 280;
-      const available = Math.floor(panelRect.bottom - listRect.top - bottomPadding);
+      const available = Math.floor(panelRect.bottom - listRect.top - bottomPadding - extraGap - footerReserve);
       const nextHeight = Math.max(minHeight, Math.min(maxHeight, available));
       statusList.style.height = `${nextHeight}px`;
     };
@@ -752,12 +754,12 @@
     panel.appendChild(button);
     panel.appendChild(outputTitle);
     panel.appendChild(output);
-    panel.appendChild(videoSizeInfo);
     panel.appendChild(toggleLogsButton);
     statusHeader.appendChild(statusTitle);
     statusHeader.appendChild(clearLogsButton);
     logSection.appendChild(statusHeader);
     logSection.appendChild(statusList);
+    logSection.appendChild(videoSizeInfo);
     panel.appendChild(logSection);
 
     setTimeout(loadModels, 0);
