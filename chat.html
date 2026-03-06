@@ -411,7 +411,7 @@
 
       // API + SSE
       function emsg(code, payloadText, payloadJson) {
-        if (payloadJson && payloadJson.error && payloadJson.error.message) return String(payloadJson.error.message);
+        if (payloadJson && payloadJson.error && (payloadJson.error.message || payloadJson.error.details)) return String(payloadJson.error.message || payloadJson.error.details);
         if (code === 401) return '鉴权失败：Incorrect API key provided.';
         if (code === 413) return '请求体过大，请减小附件。';
         if (code >= 500) return '服务端异常，请稍后重试。';
@@ -482,7 +482,7 @@
           try {
             var parsed = JSON.parse(payload);
             if (parsed && parsed.error) {
-              apiError = String((parsed.error && parsed.error.message) || '请求失败');
+              apiError = String((parsed.error && (parsed.error.message || parsed.error.details)) || '请求失败');
               return;
             }
             var delta = parsed && parsed.choices && parsed.choices[0] && parsed.choices[0].delta && parsed.choices[0].delta.content;

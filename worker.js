@@ -851,9 +851,33 @@ async function handleChatCompletions(body, authHeader, env) {
             try {
               const parsed = JSON.parse(data);
               if (parsed?.error) {
-                const errObj = typeof parsed.error === 'string'
-                  ? { error: { message: parsed.error, type: 'api_error' } }
-                  : { error: parsed.error };
+                const upstreamError = typeof parsed.error === 'string' ? { message: parsed.error } : parsed.error;
+                const errorMsg = upstreamError.message || upstreamError.details || '请求失败';
+                // 内容安全警告作为正常输出而不是错误
+                if (upstreamError.code === 'data_inspection_failed' || upstreamError.details) {
+                  const warningChunk = {
+                    id: responseId,
+                    object: 'chat.completion.chunk',
+                    created,
+                    model: actualModel,
+                    choices: [{
+                      index: 0,
+                      delta: { role: 'assistant', content: errorMsg },
+                      finish_reason: 'stop',
+                    }],
+                  };
+                  await writer.write(encoder.encode(`data: ${JSON.stringify(warningChunk)}\n\n`));
+                  doneWritten = true;
+                  await writer.write(encoder.encode('data: [DONE]\n\n'));
+                  continue;
+                }
+                const errObj = {
+                  error: {
+                    message: errorMsg,
+                    type: upstreamError.type || 'api_error',
+                    code: upstreamError.code,
+                  }
+                };
                 await writer.write(encoder.encode(`data: ${JSON.stringify(errObj)}\n\n`));
                 continue;
               }
